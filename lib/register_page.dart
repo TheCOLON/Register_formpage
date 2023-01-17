@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -8,7 +9,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  var formkey = GlobalKey<FormState>();
+  // var formkey = GlobalKey<FormState>();
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController fullname = TextEditingController();
@@ -17,6 +20,7 @@ class _RegisterState extends State<Register> {
   bool isPasswordVisible = false;
   bool isConfirmpasswordVisible = false;
   bool validate = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,88 +64,127 @@ class _RegisterState extends State<Register> {
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: TextFormField(
-                controller: fullname,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Full Name',
-                  hintText: "Enter Valid Full name",
-                  prefixIcon: Icon(
-                    Icons.person,
-                    color: Colors.white70,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextFormField(
-                controller: email,
-                decoration: const InputDecoration(
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
+                  controller: fullname,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Can\'t be Empty';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Email',
-                    hintText: 'Ex. mondejarhoneylee16@gmail.com',
+                    labelText: 'Full Name',
+                    hintText: "Enter Full name",
                     prefixIcon: Icon(
-                      Icons.email,
+                      Icons.person,
                       color: Colors.white70,
-                    )),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: TextField(
-                obscureText: isPasswordVisible ? false : true,
-                controller: password,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: 'Password',
-                  hintText: 'Ex. Honeylee@123!',
-                  prefixIcon:
-                      const Icon(Icons.lock, color: Colors.white70, size: 22),
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isPasswordVisible = !isPasswordVisible;
-                      });
-                    },
-                    child: Icon(
-                      isConfirmpasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white70,
-                      size: 22,
                     ),
                   ),
                 ),
               ),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: TextField(
-                obscureText: isPasswordVisible ? false : true,
-                controller: confirmPass,
-                decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: 'Confirm Password',
-                    hintText: 'Ex. Honeylee@123!',
-                    prefixIcon:
-                        const Icon(Icons.lock, color: Colors.white70, size: 22),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isConfirmpasswordVisible = !isConfirmpasswordVisible;
-                        });
-                      },
-                      child: Icon(
-                        isConfirmpasswordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+              padding: const EdgeInsets.all(10),
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
+                  controller: email,
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Required'),
+                    EmailValidator(
+                        errorText: 'Please enter valid email address')
+                  ]),
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Email',
+                      // hintText: 'Ex. mondejarhoneylee16@gmail.com',
+                      prefixIcon: Icon(
+                        Icons.email,
                         color: Colors.white70,
-                        size: 22,
-                      ),
-                    )),
+                      )),
+                ),
               ),
             ),
+            Container(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: TextFormField(
+                    obscureText: isPasswordVisible ? false : true,
+                    controller: password,
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: 'Required'),
+                      MinLengthValidator(6,
+                          errorText:
+                              'Password must contain atleast 6 characters'),
+                      MaxLengthValidator(15,
+                          errorText: 'Password cannot be more 15 characters'),
+                      PatternValidator(r'(?=.*[#?!@$%&*-])',
+                          errorText:
+                              'Password must have atleast one special character')
+                    ]),
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: 'Password',
+                      hintText: 'Ex. Honeylee@123!',
+                      prefixIcon: const Icon(Icons.lock,
+                          color: Colors.white70, size: 22),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isPasswordVisible = !isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.white70,
+                          size: 22,
+                        ),
+                      ),
+                    ),
+                  ),
+                )),
+            Container(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: TextFormField(
+                    obscureText: isPasswordVisible ? false : true,
+                    controller: confirmPass,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Required';
+                      }
+                      return MatchValidator(errorText: "Password didn't match")
+                          .validateMatch(value, password.text);
+                    },
+                    decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: 'Confirm Password',
+                        prefixIcon: const Icon(Icons.lock,
+                            color: Colors.white70, size: 22),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isConfirmpasswordVisible =
+                                  !isConfirmpasswordVisible;
+                            });
+                          },
+                          child: Icon(
+                            isConfirmpasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.white70,
+                            size: 22,
+                          ),
+                        )),
+                  ),
+                )),
             const SizedBox(height: 10),
             GestureDetector(
                 onTap: () {},

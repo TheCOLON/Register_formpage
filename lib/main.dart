@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:register_page/register_page.dart';
+// import 'home.dart';
 
 void main() {
   runApp(MaterialApp(
