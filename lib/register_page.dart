@@ -19,7 +19,6 @@ class _RegisterState extends State<Register> {
 
   bool isPasswordVisible = false;
   bool isConfirmpasswordVisible = false;
-  bool validate = false;
 
   @override
   Widget build(BuildContext context) {
