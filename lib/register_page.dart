@@ -9,8 +9,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  // var formkey = GlobalKey<FormState>();
-  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  var formkey = GlobalKey<FormState>();
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
