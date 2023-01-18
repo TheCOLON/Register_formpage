@@ -15,6 +15,8 @@ class _RegisterState extends State<Register> {
   TextEditingController password = TextEditingController();
   TextEditingController fullname = TextEditingController();
   TextEditingController confirmPass = TextEditingController();
+  TextEditingController address = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
 
   bool isPasswordVisible = false;
   bool isConfirmpasswordVisible = false;
@@ -103,6 +105,54 @@ class _RegisterState extends State<Register> {
                         Icons.email,
                         color: Colors.white70,
                       )),
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
+                  controller: address,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Required';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Address',
+                    hintText: "Enter Your Address",
+                    prefixIcon: Icon(
+                      Icons.home,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: TextFormField(
+                  controller: phoneNumber,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Required';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Phone Number',
+                    hintText: "Enter Your Contact number",
+                    prefixIcon: Icon(
+                      Icons.phone,
+                      color: Colors.white70,
+                    ),
+                  ),
                 ),
               ),
             ),
